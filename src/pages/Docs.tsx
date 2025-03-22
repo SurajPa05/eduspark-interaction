@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import NavigationBar from "@/components/NavigationBar";
 import { DocumentSections, DocumentChatInput } from "@/components/DocumentSection";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface File {
   id: string;
@@ -92,6 +93,7 @@ const initialSections: Section[] = [
 
 const Docs = () => {
   const [sections, setSections] = useState<Section[]>(initialSections);
+  const isMobile = useIsMobile();
 
   const handleToggleSection = (id: string) => {
     setSections(prevSections =>
@@ -112,8 +114,8 @@ const Docs = () => {
     <div className="min-h-screen bg-white">
       <NavigationBar />
       
-      <div className="w-full px-4">
-        <div className="glass rounded-lg p-6 mb-4">
+      <div className="w-full px-0 md:px-4 max-w-[100vw] overflow-x-hidden">
+        <div className="glass rounded-lg p-4 md:p-6 mb-4 mx-auto">
           <DocumentSections
             sections={sections}
             onToggleSection={handleToggleSection}
