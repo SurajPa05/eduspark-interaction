@@ -7,6 +7,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Index from "./pages/Index";
+import Landing from "./pages/Landing";
+import Login from "./pages/Login";
 import Chat from "./pages/Chat";
 import Docs from "./pages/Docs";
 import Library from "./pages/Library";
@@ -26,7 +28,8 @@ const App = () => {
           <Sonner />
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<Navigate to="/chat" replace />} />
+              <Route path="/" element={<Landing />} />
+              <Route path="/login" element={<Login />} />
               <Route path="/chat" element={<Chat />} />
               <Route path="/docs" element={<Docs />} />
               <Route path="/library" element={<Library />} />
