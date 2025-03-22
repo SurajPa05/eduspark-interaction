@@ -3,7 +3,21 @@ import React, { useState } from "react";
 import NavigationBar from "@/components/NavigationBar";
 import { DocumentSections, DocumentChatInput } from "@/components/DocumentSection";
 
-const initialSections = [
+interface File {
+  id: string;
+  title: string;
+  type: "pdf" | "doc" | "txt";
+  dateModified: Date;
+}
+
+interface Section {
+  id: string;
+  title: string;
+  files: File[];
+  isExpanded: boolean;
+}
+
+const initialSections: Section[] = [
   {
     id: "1",
     title: "Research Papers",
@@ -77,7 +91,7 @@ const initialSections = [
 ];
 
 const Docs = () => {
-  const [sections, setSections] = useState(initialSections);
+  const [sections, setSections] = useState<Section[]>(initialSections);
 
   const handleToggleSection = (id: string) => {
     setSections(prevSections =>
@@ -95,10 +109,10 @@ const Docs = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white p-6">
+    <div className="min-h-screen bg-white">
       <NavigationBar />
       
-      <div className="max-w-6xl mx-auto">
+      <div className="w-full px-4">
         <div className="glass rounded-lg p-6 mb-4">
           <DocumentSections
             sections={sections}

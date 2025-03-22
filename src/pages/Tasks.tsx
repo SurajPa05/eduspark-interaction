@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import NavigationBar from "@/components/NavigationBar";
 import { TaskBoard, AddTaskButton } from "@/components/TaskBoard";
+import AddTaskDialog from "@/components/AddTaskDialog";
 
 interface Task {
   id: string;
@@ -74,6 +75,8 @@ const Tasks = () => {
   const [tasks, setTasks] = useState<Task[]>(initialTasks);
   const [draggedTaskId, setDraggedTaskId] = useState<string | null>(null);
   const [sourceStatus, setSourceStatus] = useState<Task["status"] | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [newTaskStatus, setNewTaskStatus] = useState<Task["status"]>("todo");
 
   const columns = [
     {
@@ -126,11 +129,23 @@ const Tasks = () => {
     setSourceStatus(null);
   };
 
-  const handleAddTask = (status: Task["status"]) => {
+  const handleOpenAddTaskDialog = (status: Task["status"]) => {
+    setNewTaskStatus(status);
+    setDialogOpen(true);
+  };
+
+  const handleAddTask = (taskData: {
+    title: string;
+    description?: string;
+    dueDate?: Date;
+    status: Task["status"];
+  }) => {
     const newTask: Task = {
       id: `task${tasks.length + 1}`,
-      title: `New Task ${tasks.length + 1}`,
-      status,
+      title: taskData.title,
+      description: taskData.description,
+      status: taskData.status,
+      dueDate: taskData.dueDate,
       priority: "medium",
       labels: ["New"],
     };
@@ -139,22 +154,29 @@ const Tasks = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white p-6">
+    <div className="min-h-screen bg-white">
       <NavigationBar />
       
-      <div className="max-w-6xl mx-auto">
+      <div className="w-full px-4">
         <div className="glass rounded-lg p-6 relative">
           <h2 className="text-xl font-medium text-gray-800 mb-4">Task Board</h2>
           
           <TaskBoard
             columns={columns}
-            onAddTask={handleAddTask}
+            onAddTask={handleOpenAddTaskDialog}
             onDragStart={handleDragStart}
             onDragOver={handleDragOver}
             onDrop={handleDrop}
           />
           
-          <AddTaskButton onClick={() => handleAddTask("todo")} />
+          <AddTaskButton onClick={() => handleOpenAddTaskDialog("todo")} />
+          
+          <AddTaskDialog
+            open={dialogOpen}
+            onOpenChange={setDialogOpen}
+            onAddTask={handleAddTask}
+            status={newTaskStatus}
+          />
         </div>
       </div>
     </div>
